@@ -173,6 +173,39 @@ table.mt tr:last-child td{border-bottom:none;}
   .match-card{grid-template-columns:1fr 70px 1fr;}.odds-col{display:none;}
   .nav-links{display:none;}
 }
+
+/* ADS */
+.ad-banner{display:flex;align-items:center;justify-content:space-between;padding:10px 1.5rem;background:linear-gradient(90deg,#1a1a2e,#16213e);border-bottom:1px solid var(--border);gap:1rem;flex-wrap:wrap;}
+[data-theme="light"] .ad-banner{background:linear-gradient(90deg,#e8f4fd,#f0f7ff);border-bottom:1px solid var(--border);}
+.ad-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text3);font-family:'JetBrains Mono',monospace;flex-shrink:0;}
+.ad-slots{display:flex;gap:8px;flex-wrap:wrap;}
+.ad-slot{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:8px;text-decoration:none;font-size:12px;font-weight:600;transition:opacity .15s,transform .1s;border:1px solid;}
+.ad-slot:hover{opacity:.9;transform:translateY(-1px);}
+.ad-bet365{background:#026b00;color:#fff;border-color:#037a00;}
+.ad-betway{background:#00a551;color:#fff;border-color:#00b85b;}
+.ad-slot-icon{font-size:14px;}
+.ad-slot-text{line-height:1.2;}
+.ad-slot-sub{font-size:10px;font-weight:400;opacity:.85;}
+.ad-disclaimer{font-size:9px;color:var(--text3);font-family:'JetBrains Mono',monospace;}
+
+/* SIDEBAR AD WIDGET */
+.ad-widget{background:linear-gradient(135deg,#1a1a2e,#16213e);border:1px solid rgba(0,212,255,.15);border-radius:10px;padding:1rem;margin-bottom:1rem;text-decoration:none;display:block;transition:transform .15s,box-shadow .15s;}
+[data-theme="light"] .ad-widget{background:linear-gradient(135deg,#e8f4fd,#ddf0ff);}
+.ad-widget:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,.1);}
+.ad-widget-label{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.ad-widget-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.ad-widget-sub{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:10px;}
+.ad-widget-cta{display:inline-block;padding:6px 14px;background:#026b00;color:#fff;border-radius:6px;font-size:11px;font-weight:700;}
+.ad-widget-disclaimer{font-size:9px;color:var(--text3);margin-top:8px;font-family:'JetBrains Mono',monospace;}
+
+/* REFRESH */
+.refresh-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px;}
+.refresh-status{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;}
+.refresh-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green);animation:blink 2s ease infinite;flex-shrink:0;}
+.refresh-dot.spinning{animation:spin .6s linear infinite;background:var(--accent);}
+.refresh-countdown{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);padding:3px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;}
+@keyframes goal-flash{0%{box-shadow:0 0 0 0 rgba(0,230,118,.6)}70%{box-shadow:0 0 0 10px rgba(0,230,118,0)}100%{box-shadow:0 0 0 0 rgba(0,230,118,0)}}
+.goal-flash{animation:goal-flash .8s ease 3;}
 </style>
 </head>
 <body>
@@ -195,7 +228,14 @@ table.mt tr:last-child td{border-bottom:none;}
         <div><div class="feed-title" id="feedTitle">Matches</div><div class="feed-sub" id="feedSub"></div></div>
         <div class="feed-date" id="todayDate"></div>
       </div>
-      <div class="filter-tabs">
+      
+<div class="refresh-bar">
+  <div class="refresh-status">
+    <span class="refresh-dot" id="refreshDot"></span>
+    <span id="refreshStatus">Live data</span>
+  </div>
+  <span class="refresh-countdown" id="refreshCountdown">Refreshing in 60s</span>
+</div><div class="filter-tabs">
         <div class="filter-tab active" onclick="filterMatches('all',this)">All</div>
         <div class="filter-tab" onclick="filterMatches('live',this)">🔴 Live</div>
         <div class="filter-tab" onclick="filterMatches('upcoming',this)">⏱ Upcoming</div>
@@ -463,7 +503,9 @@ function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classLis
 function toggleTheme(){const h=document.documentElement,dark=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',dark?'light':'dark');document.getElementById('themeBtn').textContent=dark?'🌙':'☀️';}
 document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
 populateSelects('epl');
-loadMatches();
+loadMatches().then(() => startRefreshTimer());
+// Cache initial scores
+ALL_MATCHES.forEach(m => { prevScores[m.home+m.away] = {scoreH:m.scoreH, scoreA:m.scoreA}; });
 </script>
 </body>
 </html>
