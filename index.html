@@ -256,6 +256,24 @@ select:focus{border-color:var(--accent);}
   .pred-row{grid-template-columns:1fr 1fr 1fr;}
 }
 </style>
+
+  <!-- Google AdSense — replace YOUR_PUB_ID with your ID from adsense.google.com after approval -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUB_ID" crossorigin="anonymous"></script> -->
+  <style>
+  .email-capture{background:linear-gradient(135deg,rgba(0,212,255,.08),rgba(0,212,255,.03));border:1px solid rgba(0,212,255,.2);border-radius:12px;padding:1.25rem;margin-bottom:1rem;}
+  .email-capture-title{font-family:'Cabinet Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+  .email-capture-sub{font-size:11px;color:var(--text2);margin-bottom:12px;line-height:1.5;}
+  .email-form{display:flex;gap:6px;}
+  .email-input{flex:1;background:var(--surface3);border:1px solid var(--border2);color:var(--text);padding:8px 10px;border-radius:7px;font-size:12px;font-family:'Inter',sans-serif;outline:none;transition:border-color .15s;}
+  .email-input:focus{border-color:var(--accent);}
+  .email-input::placeholder{color:var(--text3);}
+  .email-submit{padding:8px 14px;background:var(--accent);color:#000;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;transition:opacity .15s;}
+  .email-submit:hover{opacity:.9;}
+  .email-success{font-size:11px;color:var(--green);margin-top:8px;display:none;font-family:'JetBrains Mono',monospace;}
+  .email-disclaimer{font-size:9px;color:var(--text3);margin-top:6px;font-family:'JetBrains Mono',monospace;}
+  .adsense-slot{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.5rem;margin-bottom:1rem;text-align:center;min-height:90px;display:flex;align-items:center;justify-content:center;}
+  .adsense-placeholder{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:1px;}
+  </style>
 </head>
 <body>
 
@@ -688,6 +706,19 @@ function runManualPrediction(){
 
 function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));document.querySelector(`.nav-link[onclick*="${name}"]`)?.classList.add('active');}
 function toggleTheme(){const h=document.documentElement,dark=h.getAttribute('data-theme')==='dark';h.setAttribute('data-theme',dark?'light':'dark');document.getElementById('themeBtn').textContent=dark?'🌙':'☀️';}
+
+
+function submitEmail(){
+  const input=document.getElementById('emailInput');
+  const success=document.getElementById('emailSuccess');
+  const email=input?.value?.trim();
+  if(!email||!email.includes('@')){input.style.borderColor='var(--red)';setTimeout(()=>input.style.borderColor='',2000);return;}
+  fetch('https://formspree.io/f/YOUR_FORM_ID',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,source:'statbolt.io'})}).catch(()=>{});
+  input.closest('.email-form').style.display='none';
+  if(success)success.style.display='block';
+  localStorage.setItem('sb_subscribed','1');
+}
+if(localStorage.getItem('sb_subscribed')==='1'){const f=document.querySelector('.email-form');const s=document.getElementById('emailSuccess');if(f)f.style.display='none';if(s){s.style.display='block';s.textContent='✓ Subscribed';}}
 
 // INIT
 document.getElementById('todayDate').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
