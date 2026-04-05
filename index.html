@@ -288,7 +288,7 @@ select:focus{border-color:var(--accent);}
       <div class="panel">
         <div class="panel-label">Competition</div>
         <select id="league" onchange="onLeagueChange()">
-          <option value="epl">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
+          <option value="epl">🏴 Premier League</option>
           <option value="laliga">🇪🇸 La Liga</option>
           <option value="bundesliga">🇩🇪 Bundesliga</option>
           <option value="seriea">🇮🇹 Serie A</option>
@@ -340,7 +340,7 @@ function runModel(home,away){
 function getTeam(lk,name){const list=TEAMS[lk]||[],n=(name||'').toLowerCase();return list.find(t=>t.name.toLowerCase()===n)||list.find(t=>n.includes(t.name.split(' ')[0].toLowerCase()))||list.find(t=>t.name.split(' ')[0].toLowerCase().includes(n.split(' ')[0]))||null;}
 function calcOdds(hw,dr,aw){const m=1.06;return{h:(m/(hw/100)).toFixed(2),d:(m/(dr/100)).toFixed(2),a:(m/(aw/100)).toFixed(2)};}
 function guessLK(name){return LMAP[name]||'epl';}
-function leagueFlag(name){const n=(name||'').toLowerCase();if(n.includes('premier'))return'🏴󠁧󠁢󠁥󠁮󠁧󠁿';if(n.includes('primera')||n.includes('la liga'))return'🇪🇸';if(n.includes('bundesliga'))return'🇩🇪';if(n.includes('serie a'))return'🇮🇹';if(n.includes('champions'))return'🏆';if(n.includes('europa'))return'🏆';if(n.includes('conference'))return'🏆';if(n.includes('ligue'))return'🇫🇷';if(n.includes('eredivisie'))return'🇳🇱';if(n.includes('primeira'))return'🇵🇹';if(n.includes('brasileiro'))return'🇧🇷';if(n.includes('championship'))return'🏴󠁧󠁢󠁥󠁮󠁧󠁿';return'🌍';}
+function leagueFlag(name){const n=(name||'').toLowerCase();if(n.includes('premier'))return'🏴';if(n.includes('primera')||n.includes('la liga'))return'🇪🇸';if(n.includes('bundesliga'))return'🇩🇪';if(n.includes('serie a'))return'🇮🇹';if(n.includes('champions'))return'🏆';if(n.includes('europa'))return'🏆';if(n.includes('conference'))return'🏆';if(n.includes('ligue'))return'🇫🇷';if(n.includes('eredivisie'))return'🇳🇱';if(n.includes('primeira'))return'🇵🇹';if(n.includes('brasileiro'))return'🇧🇷';if(n.includes('championship'))return'🏴';return'🌍';}
 function mapStatus(s){if(['IN_PLAY','PAUSED','HALFTIME'].includes(s))return'live';if(s==='FINISHED')return'finished';return'upcoming';}
 function dateStr(offset){const d=new Date();d.setDate(d.getDate()+(offset||0));return d.toISOString().split('T')[0];}
 function leaguePriority(name){return LEAGUE_ORDER[name]||99;}
