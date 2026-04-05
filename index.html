@@ -416,10 +416,11 @@ function mapStatus(s){if(['IN_PLAY','PAUSED','HALFTIME'].includes(s))return'live
 function dateStr(offset=0){const d=new Date();d.setDate(d.getDate()+offset);return d.toISOString().split('T')[0];}
 
 async function apiFetch(dateFrom,dateTo){
-  const res=await fetch(`${window.location.hostname.includes('netlify') ? '/.netlify/functions/matches' : '/functions/matches'}?dateFrom=${dateFrom}&dateTo=${dateTo}`);
-  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||`HTTP ${res.status}`);}
+  const res=await fetch('/functions/matches?dateFrom='+dateFrom+'&dateTo='+dateTo);
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||'HTTP '+res.status);}
   return res.json();
 }
+
 
 async function apiFetchH2H(matchId){
   const res=await fetch(`${window.location.hostname.includes('netlify') ? '/.netlify/functions/matches' : '/functions/matches'}?matchId=${matchId}&type=h2h`);
